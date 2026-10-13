@@ -190,7 +190,7 @@ jobs:
             throw 'Authenticated payload key is unavailable.'
           }
 
-          $plainLimit = [int64]256MB
+          $plainLimit = [int64]512MB
           $headerBytes = [int64](9 + 16 + 16 + 32)
           $minimumCiphertextBytes = [int64]16
           $minimumEnvelopeBytes = $headerBytes + $minimumCiphertextBytes
@@ -217,7 +217,7 @@ jobs:
           if (Test-Path -LiteralPath $whole -PathType Leaf) {
             $length = (Get-Item -LiteralPath $whole).Length
             if ($length -lt $minimumEnvelopeBytes -or $length -gt $maximumEnvelopeBytes) {
-              throw 'Authenticated payload exceeds the 256 MiB in-memory profile; use the approved large-file transfer path.'
+              throw 'Authenticated payload exceeds the 512 MiB streaming profile; use the approved large-file transfer path.'
             }
             Copy-Item -LiteralPath $whole -Destination $payload
           } else {
@@ -238,7 +238,7 @@ jobs:
                 }
                 $total += $length
                 if ($total -gt $maximumEnvelopeBytes) {
-                  throw 'Authenticated payload exceeds the 256 MiB in-memory profile; use the approved large-file transfer path.'
+                  throw 'Authenticated payload exceeds the 512 MiB streaming profile; use the approved large-file transfer path.'
                 }
                 $input = [IO.File]::OpenRead($parts[$index].FullName)
                 try { $input.CopyTo($output) } finally { $input.Dispose() }
@@ -258,7 +258,7 @@ jobs:
           Add-Type -AssemblyName System.IO.Compression
           $maximumEntries = 100000
           $maximumUncompressedBytes = [int64]1GB
-          $maximumEntryBytes = [int64]256MB
+          $maximumEntryBytes = [int64]512MB
           $maximumCompressionRatio = 200.0
           $manifestLimit = [int64]64KB
           $archiveInfo = Get-Item -LiteralPath $archive
