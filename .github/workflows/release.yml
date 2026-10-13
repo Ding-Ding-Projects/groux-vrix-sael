@@ -164,6 +164,8 @@ jobs:
       - name: Setup Android tools
         if: runner.os == 'Windows'
         uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
+        with:
+          packages: platform-tools
 
       - name: Setup supported Node runtime
         if: runner.os == 'Windows'
